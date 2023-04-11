@@ -7,11 +7,13 @@ var searchTermEl = $("#search-term");
 var weatherResultsEl = $("#weather-results");
 
 var currCity = "";
+var currLon = "";
+var currLat = "";
 
 var prevSearchArray = [];
 
 function searchCity(city){
-    fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid={API key}")
+    fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=cedc089a08a587bd25470a7d4e49c2ee")
         .then(function(response){
             console.log(response);
             return response.json();
@@ -25,8 +27,19 @@ function printResults(){
     console.log("here");
 };
 
-function handleSubmit(){
+function handleSubmit(event){
+    event.preventDefault();
+    currCity = cityEl.val();
+    console.log(currCity);
 
+    if (currCity) {
+        searchCity(currCity);
+    
+        weatherResultsEl.textContent = '';
+        cityEl.value = '';
+    } else {
+    alert('Please enter a City');
+    }
 }
 
 if (localStorage.getItem("prevSearchArray")){
@@ -42,7 +55,7 @@ for (var i = 0; i < prevSearchArray.length; i++){
     newBtn.appendTo(prevSearchEl);
 }
 
-prevSearchBtn.on("click", printResults);
+// prevSearchBtn.on("click", printResults);
 searchFormEl.on("submit", handleSubmit);
 
 /*
