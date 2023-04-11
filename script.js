@@ -7,23 +7,48 @@ var searchTermEl = $("#search-term");
 var weatherResultsEl = $("#weather-results");
 
 var currCity = "";
-var currLon = "";
-var currLat = "";
+var currLon;
+var currLat;
 
 var prevSearchArray = [];
 
 function searchCity(city){
-    fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=cedc089a08a587bd25470a7d4e49c2ee")
+    var urlGeo = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=cedc089a08a587bd25470a7d4e49c2ee";
+    fetch(urlGeo)
         .then(function(response){
-            console.log(response);
+            // console.log(response);
             return response.json();
         })
         .then(function(data){
-            console.log(data);
+            currLon = data[0].lon;
+            currLat = data[0].lat;
+            console.log(currLat + " " + currLon);
+
+            var urlCast = "api.openweathermap.org/data/2.5/forecast?lat=" + currLat + "&lon=" + currLon + "&appid=cedc089a08a587bd25470a7d4e49c2ee";
+
+            console.log(urlCast);
+
+            fetch(urlCast)
+            .then(function(response){
+                console.log(response);
+                return response.json();
+            })
+            .then(function(data){
+                console.log(data);
+            });
+
         });
+
 };
 
-function printResults(){
+function printResults(city, searchTerm){
+    if (repos.length === 0) {
+        searchTermEl.textContent = "Error";
+        return;
+    }
+
+    searchTerm.textContent = searchTerm;
+
     console.log("here");
 };
 
